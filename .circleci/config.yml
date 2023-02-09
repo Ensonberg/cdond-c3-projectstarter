@@ -136,7 +136,7 @@ jobs:
             npm audit --audit-level=critical
 
   scan-backend:
-    docker:
+   docker:
       # Docker image here
       - image: circleci/node:13.8.0
     steps:
