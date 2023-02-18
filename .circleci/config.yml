@@ -203,7 +203,7 @@ jobs:
           command: |
             yum install -y tar gzip
 
-      - run:      
+    - run:      
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
@@ -278,7 +278,7 @@ jobs:
             apk add --update ansible
             apk add openssh-client
             pip3 install awscli
-            
+
       - run:
           name: Configure server
           command: |
@@ -323,7 +323,7 @@ jobs:
                 -d "0"
             fi
      # Here's where you will add some code to rollback on failure      
-
+                    
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
