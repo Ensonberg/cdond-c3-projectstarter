@@ -303,9 +303,9 @@ jobs:
           command: |
             # Your code here
             cd backend
-            cat .env
+            # cat .env
             npm i
-            npm run build
+            # npm run build
             npm run migrations > migrations_dump.txt
             cat migrations_dump.txt
       - run:
