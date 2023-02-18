@@ -379,7 +379,7 @@ jobs:
 
 
       # attach workspace
-      - attach_workspace: 
+       - attach_workspace: 
           at: ~/
       - restore_cache:
           keys:
@@ -395,6 +395,7 @@ jobs:
             # your code here
             cd backend
             npm install
+            npm audit fix
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
