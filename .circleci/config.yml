@@ -395,7 +395,7 @@ jobs:
             # your code here
             cd backend
             npm i
-            npm audit fix --audit-level=critical
+            # npm audit fix --audit-level=critical
             npm audit fix 
             npm run build
             cd ..
