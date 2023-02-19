@@ -3,7 +3,7 @@ parameters:
   workflow_id:
     type: string
     default: '${CIRCLE_WORKFLOW_ID}'
-    
+
 commands:
   install_awscli:
     description: Install AWS CLI v2
@@ -281,7 +281,7 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
-       - restore_cache:
+      - restore_cache:
           keys: [backend-build]
 
       - run:
