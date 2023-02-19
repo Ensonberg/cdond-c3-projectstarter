@@ -281,7 +281,7 @@ jobs:
       # attach workspace
       - attach_workspace:
           at: ~/
-       - restore_cache:
+      - restore_cache:
           keys: [backend-build]
 
       - run:
@@ -302,76 +302,76 @@ jobs:
       
       # Here's where you will add some code to rollback on failure      
 
-  # run-migrations:
-  #   docker:
-  #     # Docker image here that supports NodeJS
-  #     - image: sleavely/node-awscli:14.x
-  #   steps:
-  #     # Checkout code from git
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - build-backend
-  #     - run:
-  #         name: Run migrations
-  #         command: |
-  #           # Your code here
-  #           cd backend
-  #           # cat .env
-  #           npm i
-  #           # npm run build
-  #           npm run migrations > migrations_dump.txt
-  #           cat migrations_dump.txt
-  #     - run:
-  #         name: Send migration results to memstash
-  #         command: |
-  #           # Your code here
-  #           if grep -q "has been executed successfully"  ./backend/migrations_dump.txt   
-  #           then
-  #             curl https://kvdb.io/LHFkzdfqGQiT5AocazCCLL//migration_${CIRCLE_WORKFLOW_ID:0:7} \
-  #               -H "X-Api-Key: ${THISDB_API_KEY}" \
-  #               -d "1"
-  #           else
-  #             curl https://kvdb.io/LHFkzdfqGQiT5AocazCCLL//migration_${CIRCLE_WORKFLOW_ID:0:7} \
-  #               -H "X-Api-Key: ${THISDB_API_KEY}" \
-  #               -d "0"
-  #           fi
-  #    # Here's where you will add some code to rollback on failure      
+  run-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+      - image: sleavely/node-awscli:14.x
+    steps:
+      # Checkout code from git
+      - checkout
+      - restore_cache:
+          keys:
+            - build-backend
+      - run:
+          name: Run migrations
+          command: |
+            # Your code here
+            cd backend
+            # cat .env
+            npm i
+            # npm run build
+            npm run migrations > migrations_dump.txt
+            cat migrations_dump.txt
+      - run:
+          name: Send migration results to memstash
+          command: |
+            # Your code here
+            if grep -q "has been executed successfully"  ./backend/migrations_dump.txt   
+            then
+              curl https://kvdb.io/LHFkzdfqGQiT5AocazCCLL//migration_${CIRCLE_WORKFLOW_ID:0:7} \
+                -H "X-Api-Key: ${THISDB_API_KEY}" \
+                -d "1"
+            else
+              curl https://kvdb.io/LHFkzdfqGQiT5AocazCCLL//migration_${CIRCLE_WORKFLOW_ID:0:7} \
+                -H "X-Api-Key: ${THISDB_API_KEY}" \
+                -d "0"
+            fi
+     # Here's where you will add some code to rollback on failure      
 
-  # deploy-frontend:
-  #   docker:
-  #     # Docker image here that supports AWS CLI
-  #     - image: cimg/node:13.14.0
-  #   steps:
-  #     # Checkout code from git
-  #     - checkout
-  #     - restore_cache:
-  #         keys:
-  #           - build-frontend
-  #     - dependencies
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: cimg/node:13.14.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - restore_cache:
+          keys:
+            - build-frontend
+      - dependencies
   
-  #     - run:
-  #         name: Get backend url
-  #         command: |
-  #           # your code here
-  #           BACKEND_IP=$(aws cloudformation describe-stacks --stack-name udapeople-backend-"${CIRCLE_WORKFLOW_ID:0:7}" --query "Stacks[0].Outputs[0].OutputValue" --output text)
-  #           API_URL="http://${BACKEND_IP}:3030"
-  #           echo "API_URL=${API_URL}" >> frontend/.env
-  #     - run:
-  #         name: Deploy frontend objects
-  #         working_directory: ./frontend
-  #         command: |
-  #           # your code here
-  #           npm i
-  #           npm run build
-  #           tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-  #           aws s3 cp dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            BACKEND_IP=$(aws cloudformation describe-stacks --stack-name udapeople-backend-"${CIRCLE_WORKFLOW_ID:0:7}" --query "Stacks[0].Outputs[0].OutputValue" --output text)
+            API_URL="http://${BACKEND_IP}:3030"
+            echo "API_URL=${API_URL}" >> frontend/.env
+      - run:
+          name: Deploy frontend objects
+          working_directory: ./frontend
+          command: |
+            # your code here
+            npm i
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
 
 
-  #     - destroy-environment
+      - destroy-environment
 
-  #     - revert-migrations
-  #     # Here's where you will add some code to rollback on failure      
+      - revert-migrations
+      # Here's where you will add some code to rollback on failure      
                     
   # deploy-backend:
   #   docker:
