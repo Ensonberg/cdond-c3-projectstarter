@@ -256,7 +256,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
         environment:
           NODE_ENV: "production"
           VERSION: "1"
