@@ -256,7 +256,7 @@ jobs:
   configure-infrastructure:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
+      - image: cimg/node:13.8.0
         environment:
           NODE_ENV: "production"
           VERSION: "1"
