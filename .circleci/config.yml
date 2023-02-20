@@ -205,13 +205,12 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+  
+      - image: cimg/node:13.8.0
     steps:
       - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            yum install -y tar gzip
+      - install_awscli
+      
 
       - run:      
           name: Ensure back-end infrastructure exists
@@ -254,6 +253,7 @@ jobs:
           paths:
             - project/.circleci/ansible/inventory.txt
 #       # Here's where you will add some code to rollback on failure      
+      
 
   configure-infrastructure:
     docker:
