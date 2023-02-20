@@ -26,10 +26,10 @@ commands:
             sudo apt install ansible -y
             
   install_nodejs:
-    description: Install Node.js 14
+    description: Install Node.js 13
     steps:
       - run:
-          name: Install Node.js 14
+          name: Install Node.js 13
           command: |
             # Install Node.js LTS version as our base Node.js version
             curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
@@ -257,6 +257,7 @@ jobs:
     docker:
       # Docker image here that supports Ansible
       - image: cimg/base:stable
+      - image: circleci/node:13.8.0
         environment:
           NODE_ENV: "production"
           VERSION: "1"
@@ -275,7 +276,7 @@ jobs:
       - install_ansible
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["7a:cb:62:3d:a8:18:28:0d:fe:b5:ee:bb:c6:1c:da:7d"]
+          fingerprints: ["cc:fe:44:17:00:9f:c6:03:15:c8:08:02:75:14:91:58"]
       # attach workspace
       - attach_workspace:
           at: ~/
@@ -334,15 +335,16 @@ jobs:
                 -H "X-Api-Key: ${THISDB_API_KEY}" \
                 -d "0"
             fi
-     # Here's where you will add some code to rollback on failure    
+     # Here's where you will add some code to rollback on failure      
 
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      # - image: amazon/aws-cli
-      - image: cimg/node:13.8.0
+      -  image: sleavely/node-awscli:14.x
     steps:
+      # Checkout code from git
       - checkout
+    
       - install_awscli
       - install_nodejs
 
@@ -354,9 +356,12 @@ jobs:
           command: |
             cd frontend
             npm install
+      
+  
       - run:
           name: Get backend url
           command: |
+            # your code here
             export BACKEND_IP=$(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
@@ -365,18 +370,22 @@ jobs:
             echo "API_URL = ${API_URL}"
             echo "API_URL=http://${BACKEND_IP}:3030" >> frontend/.env
             cat frontend/.env
+
       - run:
           name: Deploy frontend objects
+          working_directory: ./frontend
           command: |
+            # your code here
             cd frontend
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+
+
       - destroy-environment
 
-      - revert-migrations  
-
-      
+      - revert-migrations
+      # Here's where you will add some code to rollback on failure      
                     
   # deploy-backend:
   #   docker:
