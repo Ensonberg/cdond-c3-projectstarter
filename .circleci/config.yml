@@ -340,7 +340,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      -  image: cimg/base:stable
+      -  circleci/node:13.8.0
     steps:
       # Checkout code from git
       - checkout
@@ -407,7 +407,7 @@ jobs:
   #     - checkout
   #     # Add ssh keys with fingerprint
   #     - add_ssh_keys:
-  #         fingerprints: ["7a:cb:62:3d:a8:18:28:0d:fe:b5:ee:bb:c6:1c:da:7d"]
+  #         fingerprints: ["cc:fe:44:17:00:9f:c6:03:15:c8:08:02:75:14:91:58"]
      
 
 
