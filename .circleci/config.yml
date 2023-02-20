@@ -210,48 +210,46 @@ jobs:
     steps:
       - checkout
       - install_awscli
-      
 
-      - run:      
+
+
+      - run:
           name: Ensure back-end infrastructure exists
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
-              --tags project=udapeople \
-              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
+              --tags project=uda-backend \
+              --stack-name "udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
-         
-             
+    
       - run:
           name: Ensure front-end infrastructure exist
           command: |
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
-              --tags project=udapeople \
-              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7} \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
-              
+              --tags project=uda-frontend \
+              --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
       - run:
-          name: Add back-end ip to ansible inventory
+          name: Add back-end IP to Ansible inventory
           command: |
-            # Your code here
-            cd .circleci/ansible
-            cat inventory.txt
-            aws ec2 describe-instances \
-            --query 'Reservations[*].Instances[*].PublicIpAddress'  \
-            --output text --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
-            cat inventory.txt
-            # export BACKEND_IP=$(aws ec2 describe-instances \
-            # --query 'Reservations[*].Instances[*].PublicIpAddress' \
-            # --filter Name-tag:Name,Values-backend-${CIRCLE_WORKFLOW_ID:0:7} \
-            # --output text 
-            # )
-            # echo ${BACKEND_IP}
-
+            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            echo $BACKEND_PUBLIC_IP >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+
+      - destroy-environment 
+      
+
+      
+
+    
 #       # Here's where you will add some code to rollback on failure      
       
 
