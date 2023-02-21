@@ -5,24 +5,24 @@ parameters:
     default: '${CIRCLE_WORKFLOW_ID}'
     
 commands:
-   dependencies:
-    steps:
-      - run:
-          name: Installing necessary packages
-          command: |
-            sudo apt update
-            sudo apt install -y tar gzip curl software-properties-common
-      - run:
-          name: Installing aws-cli
-          command: |
-            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-            unzip awscliv2.zip
-            sudo ./aws/install
-      - run:
-          name: Installing ansible
-          command: |
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible
+  dependencies:
+  steps:
+    - run:
+        name: Installing necessary packages
+        command: |
+          sudo apt update
+          sudo apt install -y tar gzip curl software-properties-common
+    - run:
+        name: Installing aws-cli
+        command: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install
+    - run:
+        name: Installing ansible
+        command: |
+          sudo add-apt-repository --yes --update ppa:ansible/ansible
+          sudo apt install ansible
 
   install_awscli:
     description: Install AWS CLI v2
@@ -406,7 +406,7 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: ["cc:fe:44:17:00:9f:c6:03:15:c8:08:02:75:14:91:58"]
+          fingerprints: ["7a:cb:62:3d:a8:18:28:0d:fe:b5:ee:bb:c6:1c:da:7d"]
      
 
 
