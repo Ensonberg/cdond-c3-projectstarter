@@ -435,7 +435,6 @@ jobs:
 
       - revert-migrations
      
-
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
