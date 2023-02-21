@@ -6,24 +6,24 @@ parameters:
     
 commands:
   dependencies:
-  steps:
-    - run:
-        name: Installing necessary packages
-        command: |
-          sudo apt update
-          sudo apt install -y tar gzip curl software-properties-common
-    - run:
-        name: Installing aws-cli
-        command: |
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-    - run:
-        name: Installing ansible
-        command: |
-          sudo add-apt-repository --yes --update ppa:ansible/ansible
-          sudo apt install ansible
-
+    steps:
+      - run:
+          name: Installing necessary packages
+          command: |
+            sudo apt update
+            sudo apt install -y tar gzip curl software-properties-common
+      - run:
+          name: Installing aws-cli
+          command: |
+            curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+            unzip awscliv2.zip
+            sudo ./aws/install
+      - run:
+          name: Installing ansible
+          command: |
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible
+  
   install_awscli:
     description: Install AWS CLI v2
     steps:
@@ -354,8 +354,8 @@ jobs:
                 -H "X-Api-Key: ${THISDB_API_KEY}" \
                 -d "0"
             fi
-     # Here's where you will add some code to rollback on failure 
-
+     # Here's where you will add some code to rollback on failure    
+     
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
@@ -384,56 +384,7 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
-      # Here's where you will add some code to rollback on failure      
-                    
-  deploy-backend:
-    docker:
-      # Docker image here that supports Ansible
-      - image: python:3.7-alpine3.11
-        environment:
-          NODE_ENV: "production"
-          VERSION: "1"
-          ENVIRONMENT: "production"
-          TYPEORM_CONNECTION: $TYPEORM_CONNECTION
-          TYPEORM_HOST: $TYPEORM_HOST
-          TYPEORM_USERNAME: $TYPEORM_USERNAME
-          TYPEORM_PASSWORD: $TYPEORM_PASSWORD
-          TYPEORM_DATABASE: $TYPEORM_DATABASE
-          TYPEORM_PORT: $TYPEORM_PORT
-          TYPEORM_ENTITIES: $TYPEORM_ENTITIES  
-    steps:
-      # Checkout code from git
-      - checkout
-      # Add ssh keys with fingerprint
-      - add_ssh_keys:
-          fingerprints: ["7a:cb:62:3d:a8:18:28:0d:fe:b5:ee:bb:c6:1c:da:7d"]
-     
-
-
-      # attach workspace
-      - attach_workspace: 
-          at: ~/
-      - restore_cache:
-          keys:
-            - build-backend
-      - run:
-          name: Install dependencies
-          command: |
-            # your code here
-            apk add --update ansible nodejs npm tar gzip
-      - run:
-          name: Deploy backend
-          command: |
-            # your code here
-            cd backend
-            npm i
-            npm audit fix --audit-level=critical
-            npm audit fix 
-            npm run build
-            cd ..
-            tar -C backend -czvf artifact.tar.gz .
-            cat ~/project/.circleci/ansible/inventory.txt
-            ansible-playbook -i ~/project/.circleci/ansible/inventory.txt ~/project/.circleci/ansible/deploy-backend.yml     
+      # Here's where you will add some code to rollback on failure           
 
   # deploy-frontend:
   #   docker:
@@ -483,7 +434,7 @@ jobs:
   #     - destroy-environment
 
   #     - revert-migrations
-      # Here's where you will add some code to rollback on failure      
+  #     Here's where you will add some code to rollback on failure      
                     
   # deploy-backend:
   #   docker:
