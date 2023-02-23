@@ -276,7 +276,7 @@ jobs:
     docker:
       # Docker image here that supports Ansible
       - image: cimg/base:stable
-      - image: circleci/node:13.8.0
+      # - image: circleci/node:13.8.0
         environment:
           NODE_ENV: "production"
           VERSION: "1"
@@ -359,7 +359,7 @@ jobs:
   deploy-frontend:
     docker:
       # Docker image here that supports AWS CLI
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       # Checkout code from git
       - checkout
@@ -439,7 +439,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: circleci/node:13.8.0
+      - image: cimg/base:stable
     steps:
       - checkout
       - install_awscli
