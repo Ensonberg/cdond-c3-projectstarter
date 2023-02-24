@@ -505,8 +505,7 @@ jobs:
       - install_awscli
       - install_nodejs
 
-      - attach_workspace:
-          at: ~/
+     
 
       - run:
           name: Backend smoke test
