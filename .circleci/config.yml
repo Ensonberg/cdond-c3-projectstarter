@@ -505,7 +505,7 @@ jobs:
       - install_awscli
       - install_nodejs
 
-      
+
       - attach_workspace:
           at: ~/
      
@@ -514,7 +514,7 @@ jobs:
           name: Backend smoke test
           command: |
 
-            BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
+            
             sudo apt install curl -y
             BACKEND_PUBLIC_IP=$(aws ec2 describe-instances \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
