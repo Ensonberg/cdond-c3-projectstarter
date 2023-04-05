@@ -1,0 +1,10 @@
+[URL01]  Public Url to GitHub repository
+https://github.com/Ensonberg/cdond-c3-projectstarter
+
+
+
+[URL02] Public URL for your S3 Bucket
+http://udapeople-104e2f3.s3-website-us-east-1.amazonaws.com
+
+[URL02] CDN
+http://dpb82u43982r1.cloudfront.net/#/employees/new
