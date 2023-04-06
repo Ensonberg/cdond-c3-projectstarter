@@ -75,7 +75,7 @@ commands:
               npm install
               npm run build
               npm run migrations:revert
-            fi
+            
 
 orbs: 
   slack: circleci/slack@4.12.1
